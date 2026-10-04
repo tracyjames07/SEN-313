@@ -88,7 +88,7 @@ impl Scanner {
                     self.add(TokenType::Slash);
                 }         
             }
-            _ => {}
+            _ => self.error(self.line, "Character is not part of any token."),
         }
     }
 
