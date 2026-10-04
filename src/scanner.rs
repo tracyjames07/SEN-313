@@ -99,14 +99,14 @@ impl Scanner {
         let start_line = self.line;
 
         while self.peek() != '"' && !self.at_end() {
-            if self.peek() == '"' {
+            if self.peek() == '\n' {
                 self.line += 1;
             } 
             self.advance();
         }
 
         if self.at_end() {
-            self.error(start_line, "The string is never closed.");
+            self.error(start_line, "String is never closed.");
             return;
         }
 
