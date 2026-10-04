@@ -28,14 +28,38 @@ impl Scanner {
     fn run(&mut self) {
         // TODO(you): drive the scan: read one token at a time until the source runs out, then
         //            add the EOF token. Spec 6.1 says which line EOF carries.
-        todo!("run")
+        while !self.at_end() {
+            self.start = self.current;
+            self.scan_token();
+        }
+
+        let line = self.tokens.last().map(|t| t.line).unwrap_or(1);
+        self.tokens.push(Token {
+            kind: TokenType::Eof,
+            lexeme: String::new(),
+            line: line,
+        });
+
     }
 
     fn scan_token(&mut self) {
         // TODO(you): recognise one token. Spec 1.2 lists every token type, 1.1 covers
         //            whitespace and comments, and an unrecognised character is 'Character is
         //            not part of any token.' (5.1).
-        todo!("scan_token")
+        let c = self.advance();
+
+        match c {
+            '(' => self.add(TokenType::LParen),
+            ')' => self.add(TokenType::RParen),
+            '{' => self.add(TokenType::LBrace),
+            '}' => self.add(TokenType::RBrace),
+            ',' => self.add(TokenType::Comma),
+            ';' => self.add(TokenType::Semicolon),
+            '+' => self.add(TokenType::Plus),
+            '-' => self.add(TokenType::Minus),
+            '*' => self.add(TokenType::Star),
+            _ => {}
+        }
     }
 
     fn string(&mut self) {
