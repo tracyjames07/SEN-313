@@ -88,6 +88,7 @@ impl Scanner {
                     self.add(TokenType::Slash);
                 }         
             }
+            '"' => self.string(),
             _ => self.error(self.line, "Character is not part of any token."),
         }
     }
@@ -95,7 +96,22 @@ impl Scanner {
     fn string(&mut self) {
         // TODO(you): scan a string literal. A string may span lines, and an unterminated one is
         //            reported at the line it opened on (1.5; the message is in 5.1).
-        todo!("string")
+        let start_line = self.line;
+
+        while self.peek() != '"' && !self.at_end() {
+            if self.peek() == '"' {
+                self.line += 1;
+            } 
+            self.advance();
+        }
+
+        if self.at_end() {
+            self.error(start_line, "The string is never closed.");
+            return;
+        }
+
+        self.advance();
+        self.add(TokenType::Str);
     }
 
     fn number(&mut self) {
