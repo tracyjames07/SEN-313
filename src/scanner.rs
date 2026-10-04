@@ -62,6 +62,32 @@ impl Scanner {
             '\n' => {
                 self.line += 1;
             }
+
+            '!' => {
+                let kind = if self.matches('=') {TokenType::BangEqual} else {TokenType::Bang};
+                self.add(kind);
+            }
+            '=' => {
+                let kind = if self.matches('=') {TokenType::EqualEqual} else {TokenType::Equal};
+                self.add(kind);
+            }
+            '<' => {
+                let kind = if self.matches('=') {TokenType::LessEqual} else {TokenType::Less};
+                self.add(kind);
+            }
+            '>' => {
+                let kind = if self.matches('=') {TokenType::GreaterEqual} else {TokenType::Greater};
+                self.add(kind);
+            }
+            '/' => {
+                if self.matches('/') {
+                    while self.peek() != '\n' && !self.at_end() {
+                        self.advance();
+                    }
+                } else {
+                    self.add(TokenType::Slash);
+                }         
+            }
             _ => {}
         }
     }
