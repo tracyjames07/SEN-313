@@ -58,6 +58,10 @@ impl Scanner {
             '+' => self.add(TokenType::Plus),
             '-' => self.add(TokenType::Minus),
             '*' => self.add(TokenType::Star),
+            ' ' | '\t' | '\r' => {}
+            '\n' => {
+                self.line += 1;
+            }
             _ => {}
         }
     }
